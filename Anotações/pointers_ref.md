@@ -16,6 +16,25 @@ Quando iniciamos uma variável, o valor iniciado é copiado para o objeto que es
 
 A referência é basicamente um apelido. Uma referência não é um objeto, mas sim, apenas um outro nome para um objeto que já existe.
 
+Exemplo:
+
+```cpp
+int iVal = 2;
+int &refval = iVal;
+int &refval2 = iVal;
+
+refVal2 = 100;
+```
+
+Agora, tanto iVal quanto refVal valem 100. Isso pois refVal2 faz referência a refval que por sua vez faz referência a iVal, logo, mudar o valor de refval2 significa mudar o valor de refval que significa mudar o valor de iVal.
+
+Não podemos inicializar uma referencia, logo:
+```cpp
+int &refVal4 = 10;
+```
+daria erro.
+
+
 
 
 
