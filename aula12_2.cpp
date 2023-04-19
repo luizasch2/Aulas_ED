@@ -5,7 +5,8 @@ using namespace std;
 struct Node
 {
     int data;
-    struct Node* next; // um nó aponta para outro no, funciona como se tivessem em alocação continua na teoria (como uma lista)
+    struct Node* next; // um nó aponta para outro no, funciona como se tivessem em alocação continua na teoria (como uma lista) 
+    //ponteiro: segundo elemento do node é um ponteiro que aponta para o próximo node.
 };
 
 void printList(struct Node*);
@@ -18,10 +19,11 @@ int main()
     struct Node* terceiro = nullptr;
 
     cabeca = (struct Node*) malloc(sizeof(struct Node));
-    segundo = (struct Node*) malloc(sizeof(struct Node));
+    segundo = (struct Node*) malloc(sizeof(struct Node));   
     terceiro = (struct Node*) malloc(sizeof(struct Node));
 
-    cabeca -> data =  7;
+
+    cabeca -> data =  7; //cabeca.data (em python)
     cabeca -> next = segundo;
 
     segundo -> data = 42;
@@ -48,9 +50,9 @@ int main()
     return 0;
 }
 
-void printList(struct Node* sNode)
+void printList(struct Node* sNode) 
 {
-    while (sNode != nullptr)
+    while (sNode != nullptr) //estou no final quando meu ponteiro aponta para o nulo e quero ir até o final
     {
         cout << "Dado do nó: " << sNode->data << endl;
 
