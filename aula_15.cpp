@@ -1,6 +1,6 @@
 #include <iostream>
 
-// Lista duplamente encadeada
+// Lista duplamente encadeada - da aula 15 a 16
 
 using namespace std;
 
@@ -122,6 +122,43 @@ void deleteLast(struct Node** head) //apaga o ultimo elemento da lista
     free(ptrTemp);
 }
 
+void insertAfter(struct Node* ptrLocation, int iPayload)
+{
+    if (ptrLocation == nullptr)
+    {
+        cout << "Não foi possível realizar a inserção" << endl;
+        return;
+    }
+
+    // Insere o novo nó
+    struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+    newNode -> iData = iPayload;
+    newNode -> ptrNext = ptrLocation->ptrNext;
+    newNode -> ptrPrev = ptrLocation;
+
+    // Corrigindo o ponto de inserção
+
+    ptrLocation->ptrNext = newNode;
+    if (newNode->ptrNext != nullptr) newNode->ptrNext->ptrPrev = newNode;
+}
+
+void deleteNode(struct Node** head, struct Node* ptrDelete)
+{
+    if (*head == nullptr || ptrDelete == nullptr)
+    {
+        cout << "Não foi possível remover o nó" << endl;
+        return;
+    }
+
+    if (*head == ptrDelete) *head = ptrDelete->ptrNext; //caso em que o ponteiro que quero apagar é head -> dois casos: é o unico da lista ou não é
+
+    if (ptrDelete->ptrNext != nullptr) ptrDelete->ptrNext->ptrPrev = ptrDelete->ptrPrev;
+    
+    if (ptrDelete->ptrPrev != nullptr) ptrDelete -> ptrPrev -> ptrNext = ptrDelete->ptrNext;
+
+    free(ptrDelete);
+}
+
 int main()
 {
     //Inicializando a lista
@@ -149,6 +186,21 @@ int main()
 
     cout << "=======================" << endl;
 
+    insertAfter(head, 11);
+    insertAfter(head->ptrNext->ptrNext, 90);
+    insertAfter(head->ptrNext, 32);
+    displayList(head);
+
+    cout << "=======================" << endl;
+
+    deleteNode(&head, head);
+    deleteNode(&head, head->ptrNext);
+    displayList(head);
+
+    cout << "=======================" << endl;
+
+    deleteNode(&head, head->ptrNext->ptrNext->ptrNext->ptrNext);
+    displayList(head);
 
     return 0;
 }
