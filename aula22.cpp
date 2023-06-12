@@ -1,18 +1,8 @@
 #include <iostream>
 
-// Árvore
+// Insert e delete em uma árvore
 
 using namespace std;
-
-/*****************
-Root: Nó inicial de uma árvore
-Child Node: Nó filho de outro nó
-Parent: Nó pai de outro nó
-Sibling: Nós com mesmo pai
-Leaf Node: Nó sem filho
-Ancestor Node: Qualquer um atrás que consiga ligar direto
-******************/
-
 
 struct Node
 {
@@ -72,6 +62,72 @@ Node* searchNode(Node* node, int iData)
     // caso nenhuma das condições ocorram, sabemos que é maior, logo pela direita
     else searchNode(node->ptrRight, iData);
 }
+ 
+//recebe uma árvore e retorna um ponteiro para árvore
+Node* insert(Node* node, int iData)
+{
+    if (node == nullptr) return newNode(iData);
+
+    // se o valor a ser inserido for menor que o nó ele fica à esquerda
+    if (iData < node->iPayload)
+    {
+        node->ptrLeft = insert(node->ptrLeft, iData);
+    }
+    else
+    {
+        node->ptrRight = insert(node->ptrRight, iData);
+    }
+
+    return node;
+}
+
+Node* deleteNode(Node* node, int iData)
+{
+    if (node == nullptr) return node;
+
+    // Temos que encontrar qual a subárvore que o nó que quero deletar esta
+    
+    // se o nó que tenho que remover esta a esquerda
+    if (iData < node->iPayload)
+    {
+        node->ptrLeft = deleteNode(node->ptrLeft, iData);
+    }
+
+    // se o dado for maior 
+    else if (iData > node->iPayload)
+    {
+        node->ptrRight = deleteNode(node->ptrRight, iData);
+    }
+
+    // Agora vem o código de remoção de fato, estou agora com o cara que quero remover
+    else
+    {
+        Node* ptrTemp = nullptr;
+
+        // Caso fácil: elemento com no máximo um filho (sem ou 1 filho)
+        if (node->ptrLeft == nullptr)
+        {
+            ptrTemp = node->ptrRight;
+            free(node);
+
+            return ptrTemp;
+        }
+
+        else if(node->ptrRight = nullptr)
+        {
+            ptrTemp = node->ptrRight;
+            free(node);
+
+            return ptrTemp;
+        }
+
+        // Caso difícil: elemento com dois filhos
+        
+
+    }
+
+    return node;
+}
 
 int main()
 {
@@ -82,6 +138,16 @@ int main()
     root->ptrRight = newNode(666);
     root->ptrRight->ptrLeft = newNode(1);
     root->ptrRight->ptrRight = newNode(13); 
+
+    
+    // Vazamento de memória! Cuidado! Não faça isso
+    root = nullptr;
+
+    root = insert(root, 42);
+    root = insert(root, 7);
+    root = insert(root, 666);
+    root = insert(root, 1);
+    root = insert(root, 13);
 
     cout << "Atravessando a árvore - PreOrder: ";
     traversePreOrder(root);
@@ -94,21 +160,5 @@ int main()
     cout << "Atravessando a árvore - PostOrder: ";
     traversePostOrder(root);
     cout << endl;
-
-    string resultado ;
-
-    resultado = (nullptr == searchNode(nullptr, 42)) ? "OK" : "Deu Ruim";
-    cout << "Busca nullptr: " << resultado << endl;
-
-    resultado = (root == searchNode(root, 42)) ? "OK" : "Deu Ruim";
-    cout << "Busca 42: " << resultado << endl;
-
-    resultado = (root->ptrLeft == searchNode(root, 7)) ? "OK" : "Deu Ruim";
-    cout << "Busca 7: " << resultado << endl;
-
-    resultado = (root->ptrLeft->ptrLeft == searchNode(root, 1)) ? "OK" : "Deu Ruim";
-    cout << "Busca 1: " << resultado << endl;
-
-
 }
 
