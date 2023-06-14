@@ -1,6 +1,6 @@
 #include <iostream>
 
-// Insert e delete em uma árvore
+// Insert e delete em uma árvore - aula 22 e 23
 
 using namespace std;
 
@@ -81,6 +81,19 @@ Node* insert(Node* node, int iData)
     return node;
 }
 
+// vai sempre a esquerda a fim de pegar o menor elemento
+Node* lesserLeaf (Node* node)
+{
+    Node* ptrCurrent = node;
+    
+    while (ptrCurrent && ptrCurrent->ptrLeft != nullptr)
+    {
+        ptrCurrent = ptrCurrent->ptrLeft;
+    }
+
+    return ptrCurrent;
+}
+
 Node* deleteNode(Node* node, int iData)
 {
     if (node == nullptr) return node;
@@ -104,7 +117,7 @@ Node* deleteNode(Node* node, int iData)
     {
         Node* ptrTemp = nullptr;
 
-        // Caso fácil: elemento com no máximo um filho (sem ou 1 filho)
+        // Caso fácil: elemento com no máximo um filho (sem ou 1 filho) -> direcionao delet para sub-árvore correta
         if (node->ptrLeft == nullptr)
         {
             ptrTemp = node->ptrRight;
@@ -113,7 +126,7 @@ Node* deleteNode(Node* node, int iData)
             return ptrTemp;
         }
 
-        else if(node->ptrRight = nullptr)
+        else if(node->ptrRight == nullptr)
         {
             ptrTemp = node->ptrRight;
             free(node);
@@ -121,8 +134,13 @@ Node* deleteNode(Node* node, int iData)
             return ptrTemp;
         }
 
-        // Caso difícil: elemento com dois filhos
-        
+        // Caso difícil: elemento com dois filhos -> menor elemento maior que o nó que quero deletar é o melhor para substituir
+        ptrTemp = lesserLeaf(node->ptrRight);
+
+        // fica para casa trocar os nós, aqui vamos só trocar os dados
+        node->iPayload = ptrTemp->iPayload;
+
+        node->ptrRight = deleteNode(node->ptrRight, ptrTemp->iPayload);
 
     }
 
@@ -153,12 +171,11 @@ int main()
     traversePreOrder(root);
     cout << endl;
 
-    cout << "Atravessando a árvore - InOrder: ";
-    traverseInOrder(root);
+    deleteNode(root, 42);
+    cout << "Atravessando a árvore com elemento deletado- PreOrder: ";
+    cout << "cheguei" << endl;
+    traversePreOrder(root);
     cout << endl;
 
-    cout << "Atravessando a árvore - PostOrder: ";
-    traversePostOrder(root);
-    cout << endl;
 }
 
